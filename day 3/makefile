@@ -1,10 +1,10 @@
 NAME	= main
-PT1		= 
-PT2		= 
+PT1		= pt1.cpp
+PT2		= pt2.cpp
 CC		= g++ -Wfatal-errors -Wall -Wextra -Werror -fsanitize=address
-ARGV	= files/input2.txt
+INPUT1	= files/input2.txt
 
-run: pt1
+run: pt2
 
 pt2:
 	$(CC) $(PT2) -o $(NAME) 
