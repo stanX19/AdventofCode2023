@@ -1,6 +1,6 @@
 NAME	= main
-PT1		= 
-PT2		= 
+PT1		= shortest_galaxy.cpp
+PT2		= shortest_galaxy_2.cpp
 CC		= g++ -Wfatal-errors -Wall -Wextra -Werror -fsanitize=address
 INPUT1	= files/input.txt
 INPUT2	= files/input2.txt
