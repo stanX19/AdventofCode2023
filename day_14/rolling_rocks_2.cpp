@@ -1,4 +1,5 @@
 #include <bits/stdc++.h>
+#define REPEAT 1000000000
 
 int count_char(const std::string& str, char target_char)
 {
@@ -108,11 +109,11 @@ bool is_pattern(const std::vector<int>& vec, int start, int length)
     return true;
 }
 
-std::vector<int> find_repeating_pattern(const std::vector<int>& vec, int &start)
+std::vector<int> find_repeating_pattern(const std::vector<int>& vec, int &start, int min_size=100)
 {
     int size = vec.size();
 
-    for (int length = 100; length <= size / 2; length++)
+    for (int length = min_size; length <= size / 2; length++)
     {
         for (start = 0; start <= size - length * 2; start++)
         {
@@ -148,9 +149,8 @@ int main(int argc, char** argv)
 	{
 		map.push_back(buf);
 	}
-	int repeat = 1000000000;
 	int start;
-	for (int i = 0; i < repeat; i++)
+	for (int i = 0; i < REPEAT; i++)
 	{
 		tilt_north(map);
 		tilt_west(map);
@@ -175,5 +175,5 @@ int main(int argc, char** argv)
 		std::cout << val << ' ';
 	}
 	std::cout << '\n';
-	std::cout << pattern[(repeat - start - 1) % pattern.size()] << '\n';
+	std::cout << pattern[(REPEAT - start - 1) % pattern.size()] << '\n';
 }
