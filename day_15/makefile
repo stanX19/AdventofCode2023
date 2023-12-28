@@ -1,11 +1,11 @@
 NAME	= main
-PT1		= 
-PT2		= 
+PT1		= ascii_hash.cpp
+PT2		= boxes.cpp
 CC		= g++ -Wfatal-errors -Wall -Wextra -Werror -fsanitize=address -g3
 INPUT1	= files/input.txt
 INPUT2	= files/input2.txt
 
-run: pt1
+run: pt2
 
 pt2:
 	$(CC) $(PT2) -o $(NAME) 
