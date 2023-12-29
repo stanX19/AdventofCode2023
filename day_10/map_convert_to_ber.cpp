@@ -9,10 +9,10 @@ typedef struct s_vec2
 typedef enum s_dir
 {
 	NONE = 0,
-	LEFT = 0b1000,
-	RIGHT = 0b0100,
-	UP = 0b0010,
-	DOWN = 0b0001,
+	kLEFT = 0b1000,
+	kRIGHT = 0b0100,
+	kUP = 0b0010,
+	kDOWN = 0b0001,
 } t_dir;
 
 class PipeMap
@@ -22,13 +22,13 @@ public:
 	{
 		char_tile = {
 			{'.', NONE},
-			{'|', UP | DOWN},
-			{'-', LEFT | RIGHT},
-			{'L', UP | RIGHT},
-			{'J', UP | LEFT},
-			{'7', LEFT | DOWN},
-			{'F', RIGHT | DOWN},
-			{'S', UP | DOWN | LEFT | RIGHT}
+			{'|', kUP | kDOWN},
+			{'-', kLEFT | kRIGHT},
+			{'L', kUP | kRIGHT},
+			{'J', kUP | kLEFT},
+			{'7', kLEFT | kDOWN},
+			{'F', kRIGHT | kDOWN},
+			{'S', kUP | kDOWN | kLEFT | kRIGHT}
 		};
 		start = (t_vec2){0, 0};
 	}
@@ -118,10 +118,10 @@ public:
 			{'0', '0', '0'},
 			{'1', '0', '1'},
 		};
-		ret[0][1] = (dirs & UP)? '0': '1';
-		ret[1][0] = (dirs & LEFT)? '0': '1';
-		ret[2][1] = (dirs & DOWN)? '0': '1';
-		ret[1][2] = (dirs & RIGHT)? '0': '1';
+		ret[0][1] = (dirs & kUP)? '0': '1';
+		ret[1][0] = (dirs & kLEFT)? '0': '1';
+		ret[2][1] = (dirs & kDOWN)? '0': '1';
+		ret[1][2] = (dirs & kRIGHT)? '0': '1';
 		ret[1][1] = (dirs)? '0': '1';
 		return ret;
 	}

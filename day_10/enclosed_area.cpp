@@ -9,10 +9,10 @@ typedef struct s_vec2
 typedef enum s_dir
 {
 	NONE = 0,
-	LEFT = (1 << 0),
-	RIGHT = (1 << 1),
-	UP = (1 << 2),
-	DOWN = (1 << 3),
+	kLEFT = (1 << 0),
+	kRIGHT = (1 << 1),
+	kUP = (1 << 2),
+	kDOWN = (1 << 3),
 	INNER = (1 << 4),
 	OUTER = (1 << 5),
 	MAIN_PIPE = (1 << 6),
@@ -33,13 +33,13 @@ public:
 	{
 		char_tile = {
 			{'.', NONE},
-			{'|', UP | DOWN},
-			{'-', LEFT | RIGHT},
-			{'L', UP | RIGHT},
-			{'J', UP | LEFT},
-			{'7', LEFT | DOWN},
-			{'F', RIGHT | DOWN},
-			{'S', UP | DOWN | LEFT | RIGHT}
+			{'|', kUP | kDOWN},
+			{'-', kLEFT | kRIGHT},
+			{'L', kUP | kRIGHT},
+			{'J', kUP | kLEFT},
+			{'7', kLEFT | kDOWN},
+			{'F', kRIGHT | kDOWN},
+			{'S', kUP | kDOWN | kLEFT | kRIGHT}
 		};
 		start = (t_vec2){0, 0};
 	}
@@ -73,7 +73,7 @@ public:
 	}
 	int count_inner(void)
 	{
-		dir_change = {{NONE, 0}, {LEFT, 0}, {RIGHT, 0}};
+		dir_change = {{NONE, 0}, {kLEFT, 0}, {kRIGHT, 0}};
 		int lhs;
 		int rhs;
 		int count;
@@ -85,9 +85,9 @@ public:
 			count += std::count_if(row.begin(), row.end(), [](int val) { return val & MAIN_PIPE; });
 		}
 		std::cout << "Pipe count: " << count << '\n';
-		std::cout << "Dir change: left: " << dir_change[LEFT] << "; right: " << dir_change[RIGHT] << '\n';
-		lhs = (dir_change[LEFT] > dir_change[RIGHT])? INNER: OUTER;
-		rhs = (dir_change[RIGHT] > dir_change[LEFT])? INNER: OUTER;
+		std::cout << "Dir change: left: " << dir_change[kLEFT] << "; right: " << dir_change[kRIGHT] << '\n';
+		lhs = (dir_change[kLEFT] > dir_change[kRIGHT])? INNER: OUTER;
+		rhs = (dir_change[kRIGHT] > dir_change[kLEFT])? INNER: OUTER;
 		follow_and_spray(start, NONE, lhs, rhs);
 		count = 0;
 		for (const auto& row : map)
@@ -105,14 +105,14 @@ private:
 	{
 		int &self = map[start.y][start.x];
 
-		if (start.x == 0 || !(map[start.y][start.x - 1] & RIGHT))
-			self &= ~LEFT;
-		if (start.y == 0 || !(map[start.y - 1][start.x] & DOWN))
-			self &= ~UP;
-		if ((size_t)start.x == map[start.y].size() - 1 || !(map[start.y][start.x + 1] & LEFT))
-			self &= ~RIGHT;
-		if ((size_t)start.y == map.size() - 1 || !(map[start.y + 1][start.x] & UP))
-			self &= ~DOWN;
+		if (start.x == 0 || !(map[start.y][start.x - 1] & kRIGHT))
+			self &= ~kLEFT;
+		if (start.y == 0 || !(map[start.y - 1][start.x] & kDOWN))
+			self &= ~kUP;
+		if ((size_t)start.x == map[start.y].size() - 1 || !(map[start.y][start.x + 1] & kLEFT))
+			self &= ~kRIGHT;
+		if ((size_t)start.y == map.size() - 1 || !(map[start.y + 1][start.x] & kUP))
+			self &= ~kDOWN;
 	}
 	void flood_fill(int y, int x, int color, int block)
 	{
@@ -145,14 +145,14 @@ private:
 			return ;
 		map[cord.y][cord.x] |= MAIN_PIPE;
 		dir_change[get_dir_change(self, source)]++;
-		if (self & LEFT)
-			mark_main_pipe({cord.y, cord.x - 1}, RIGHT);
-		if (self & RIGHT)
-			mark_main_pipe({cord.y, cord.x + 1}, LEFT);
-		if (self & UP)
-			mark_main_pipe({cord.y - 1, cord.x}, DOWN);
-		if (self & DOWN)
-			mark_main_pipe({cord.y + 1, cord.x}, UP);
+		if (self & kLEFT)
+			mark_main_pipe({cord.y, cord.x - 1}, kRIGHT);
+		if (self & kRIGHT)
+			mark_main_pipe({cord.y, cord.x + 1}, kLEFT);
+		if (self & kUP)
+			mark_main_pipe({cord.y - 1, cord.x}, kDOWN);
+		if (self & kDOWN)
+			mark_main_pipe({cord.y + 1, cord.x}, kUP);
 	}
 	void follow_and_spray(t_vec2 cord, int source, int lhs, int rhs)
 	{
@@ -171,33 +171,33 @@ private:
 		fill_left_right(cord, self, lhs, rhs);
 		//std::cout << "source\n";
 		fill_left_right(cord, source, rhs, lhs);
-		if (self & LEFT)
-			follow_and_spray({cord.y, cord.x - 1}, RIGHT, lhs, rhs);
-		if (self & RIGHT)
-			follow_and_spray({cord.y, cord.x + 1}, LEFT, lhs, rhs);
-		if (self & UP)
-			follow_and_spray({cord.y - 1, cord.x}, DOWN, lhs, rhs);
-		if (self & DOWN)
-			follow_and_spray({cord.y + 1, cord.x}, UP, lhs, rhs);
+		if (self & kLEFT)
+			follow_and_spray({cord.y, cord.x - 1}, kRIGHT, lhs, rhs);
+		if (self & kRIGHT)
+			follow_and_spray({cord.y, cord.x + 1}, kLEFT, lhs, rhs);
+		if (self & kUP)
+			follow_and_spray({cord.y - 1, cord.x}, kDOWN, lhs, rhs);
+		if (self & kDOWN)
+			follow_and_spray({cord.y + 1, cord.x}, kUP, lhs, rhs);
 	}
 	void fill_left_right(t_vec2 cord, int direction, int lhs, int rhs)
 	{
-		if ((direction & LEFT))
+		if ((direction & kLEFT))
 		{
 			flood_fill(cord.y - 1, cord.x, rhs, MAIN_PIPE);
 			flood_fill(cord.y + 1, cord.x, lhs, MAIN_PIPE);
 		}
-		else if ((direction & RIGHT))
+		else if ((direction & kRIGHT))
 		{
 			flood_fill(cord.y - 1, cord.x, lhs, MAIN_PIPE);
 			flood_fill(cord.y + 1, cord.x, rhs, MAIN_PIPE);
 		}
-		else if ((direction & UP))
+		else if ((direction & kUP))
 		{
 			flood_fill(cord.y, cord.x - 1, lhs, MAIN_PIPE);
 			flood_fill(cord.y, cord.x + 1, rhs, MAIN_PIPE);
 		}
-		else if ((direction & DOWN))
+		else if ((direction & kDOWN))
 		{
 			flood_fill(cord.y, cord.x - 1, rhs, MAIN_PIPE);
 			flood_fill(cord.y, cord.x + 1, lhs, MAIN_PIPE);
@@ -205,33 +205,33 @@ private:
 	}
 	t_dir get_dir_change(int to, int from)
 	{
-		if (from & UP)
+		if (from & kUP)
 		{
-			if (to & RIGHT)
-				return LEFT;
-			if (to & LEFT)
-				return RIGHT;
+			if (to & kRIGHT)
+				return kLEFT;
+			if (to & kLEFT)
+				return kRIGHT;
 		}
-		else if (from & DOWN)
+		else if (from & kDOWN)
 		{
-			if (to & RIGHT)
-				return RIGHT;
-			if (to & LEFT)
-				return LEFT;
+			if (to & kRIGHT)
+				return kRIGHT;
+			if (to & kLEFT)
+				return kLEFT;
 		}
-		else if (from & LEFT)
+		else if (from & kLEFT)
 		{
-			if (to & UP)
-				return LEFT;
-			if (to & DOWN)
-				return RIGHT;
+			if (to & kUP)
+				return kLEFT;
+			if (to & kDOWN)
+				return kRIGHT;
 		}
-		else if (from & RIGHT)
+		else if (from & kRIGHT)
 		{
-			if (to & UP)
-				return RIGHT;
-			if (to & DOWN)
-				return LEFT;
+			if (to & kUP)
+				return kRIGHT;
+			if (to & kDOWN)
+				return kLEFT;
 		}
 		return NONE;
 	}

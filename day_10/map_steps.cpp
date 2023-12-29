@@ -9,10 +9,10 @@ typedef struct s_vec2
 typedef enum s_dir
 {
 	NONE = 0,
-	LEFT = 0b1000,
-	RIGHT = 0b0100,
-	UP = 0b0010,
-	DOWN = 0b0001,
+	kLEFT = 0b1000,
+	kRIGHT = 0b0100,
+	kUP = 0b0010,
+	kDOWN = 0b0001,
 } t_dir;
 
 typedef struct s_q_node
@@ -29,13 +29,13 @@ public:
 	{
 		char_tile = {
 			{'.', NONE},
-			{'|', UP | DOWN},
-			{'-', LEFT | RIGHT},
-			{'L', UP | RIGHT},
-			{'J', UP | LEFT},
-			{'7', LEFT | DOWN},
-			{'F', RIGHT | DOWN},
-			{'S', UP | DOWN | LEFT | RIGHT}
+			{'|', kUP | kDOWN},
+			{'-', kLEFT | kRIGHT},
+			{'L', kUP | kRIGHT},
+			{'J', kUP | kLEFT},
+			{'7', kLEFT | kDOWN},
+			{'F', kRIGHT | kDOWN},
+			{'S', kUP | kDOWN | kLEFT | kRIGHT}
 		};
 		start = (t_vec2){0, 0};
 	}
@@ -92,14 +92,14 @@ public:
 			}
 			visited[cord.y][cord.x] = 1;
 			self_dir = map[cord.y][cord.x] & ~cur.source;
-			if ((self_dir & LEFT) && cord.x > 0)
-				queue.push({{cord.y, cord.x - 1}, cur.steps + 1, RIGHT});
-			if ((self_dir & RIGHT) && (size_t)cord.x < map[0].size() - 1)
-				queue.push({{cord.y, cord.x + 1}, cur.steps + 1, LEFT});
-			if ((self_dir & UP) && cord.y > 0)
-				queue.push({{cord.y - 1, cord.x}, cur.steps + 1, DOWN});
-			if ((self_dir & DOWN) && (size_t)cord.y < map.size() - 1)
-				queue.push({{cord.y + 1, cord.x}, cur.steps + 1, UP});
+			if ((self_dir & kLEFT) && cord.x > 0)
+				queue.push({{cord.y, cord.x - 1}, cur.steps + 1, kRIGHT});
+			if ((self_dir & kRIGHT) && (size_t)cord.x < map[0].size() - 1)
+				queue.push({{cord.y, cord.x + 1}, cur.steps + 1, kLEFT});
+			if ((self_dir & kUP) && cord.y > 0)
+				queue.push({{cord.y - 1, cord.x}, cur.steps + 1, kDOWN});
+			if ((self_dir & kDOWN) && (size_t)cord.y < map.size() - 1)
+				queue.push({{cord.y + 1, cord.x}, cur.steps + 1, kUP});
 		}
 		return ret - 1;
 	}
